@@ -194,3 +194,49 @@ HAVING
 ORDER BY
     sta DESC;
 
+# 17-2
+    SELECT
+    trainer_id,
+    name,
+    (
+        (SELECT COUNT(pokemon_id)
+         FROM trainer_pokemon
+         WHERE status = 'Released')
+        /
+        COUNT(pokemon_id)
+    ) AS sta
+    FROM
+        trainer_pokemon
+    JOIN
+        trainer ON trainer.id = trainer_pokemon.trainer_id
+    GROUP BY
+        trainer_id, name
+    HAVING
+        sta > 0.2
+    ORDER BY
+        sta DESC;
+
+
+# 17-3
+SELECT
+    trainer_id,
+    name,
+    (
+        (SELECT COUNT(pokemon_id)
+         FROM trainer_pokemon AS t_sub
+         WHERE t_sub.trainer_id = t.trainer_id
+           AND status = 'Released')
+        /
+        COUNT(pokemon_id)
+    ) AS sta
+FROM
+    trainer_pokemon t
+JOIN
+    trainer ON trainer.id = t.trainer_id
+GROUP BY
+    trainer_id, name
+HAVING
+    sta > 0.2
+ORDER BY
+    sta DESC;
+
